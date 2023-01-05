@@ -3,6 +3,7 @@ import {
   createLabel,
   fenToBoard,
   isDarkSquare,
+  isOccupied,
   movePawn,
   movePiece,
   printBoard,
@@ -107,9 +108,9 @@ test("pawn cannot move 2 squares on second move", () => {
 
 test("pawn can never move 3 squares", () => {
   const board = createBoard();
-  const newBoard = movePawn(board, 81)(51);
-  expect(newBoard[81]).toBe("P");
-  expect(newBoard[51]).toBe(0);
+  const newBoard = movePawn(board, 31)(61);
+  expect(newBoard[31]).toBe("p");
+  expect(newBoard[61]).toBe(0);
 });
 
 
@@ -120,12 +121,31 @@ test("non-pawns cannot use movePawn", () => {
   expect(newBoard[81]).toBe("P");
 });
 
+test("isOccupied", ()=>{
+  const board = createBoard()
+  expect(isOccupied(board, 81)).toBe(true)
+  expect(isOccupied(board, 91)).toBe(true)
+  expect(isOccupied(board, 71)).toBe(false)
+})
+
 test("pawns cannot move through pieces", ()=>{
   const board = fenToBoard("rnbqkbnr/pppppppp/8/8/8/q7/PPPPPPPP/RNBQKBNR")
-  console.log(board[81], board[71], board[61])
   const newBoard = movePawn(board, 81)(61)
   expect(newBoard[81]).toBe("P")
   expect(newBoard[71]).toBe("q")
+})
+
+test("pawn can capture diagonally", ()=>{
+  const board = fenToBoard("rnbqkbnr/pppppppp/8/8/3b4/q1P5/PP1PPPPP/RNBQKBNR")
+  const newBoard = movePawn(board, 82)(71)
+  const nextBoard = movePawn(board, 73)(64)
+  const board3 = movePawn(board, 88)(77)
+  expect(newBoard[71]).toBe("P")
+  expect(newBoard[82]).toBe(0)
+  expect(nextBoard[64]).toBe("P")
+  expect(nextBoard[73]).toBe(0)
+  expect(board3[77]).toBe(0)
+  expect(board3[88]).toBe("P")
 })
 
 test.todo("rook can move horizontally", ()=>{

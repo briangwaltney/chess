@@ -115,13 +115,26 @@ export const movePawn = (board: TPieces[], from: number) => (to: number) => {
   const newBoard = [...board];
   const row = Math.floor(from / 10);
   const direction = newBoard[from] === "p" ? 1 : -1;
+  const squareOne = from + direction * 10;
+  const squareTwo = from + direction * 20;
+  const captureOne = from + direction * 9;
+  const captureTwo = from + direction * 11;
+  const captureSquares = [
+    isOccupied(newBoard, captureOne) ? captureOne : 0,
+    isOccupied(newBoard, captureTwo) ? captureTwo : 0,
+  ];
 
   const newToOptions = [3, 8].includes(row)
-    ? [from + direction * 10, from + direction * 20]
-    : [from + direction * 10];
+    ? !isOccupied(newBoard, squareOne)
+      ? [squareOne, squareTwo]
+      : [squareOne]
+    : [squareOne];
 
-
-  if (!newToOptions.includes(to)) return newBoard;
+  if (![...newToOptions, ...captureSquares].includes(to)) return newBoard;
 
   return movePiece(newBoard, from)(to);
+};
+
+export const isOccupied = (board: TPieces[], index: number) => {
+  return board[index] !== 0;
 };
