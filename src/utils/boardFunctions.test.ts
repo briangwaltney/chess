@@ -5,6 +5,7 @@ import {
   isDarkSquare,
   movePawn,
   movePiece,
+  printBoard,
 } from "@/utils/boardFunctions";
 
 test("isDarkSquare", () => {
@@ -104,7 +105,7 @@ test("pawn cannot move 2 squares on second move", () => {
   expect(newTestPosition[22]).toBe(0);
 });
 
-test("white pawn can never move 3 squares", () => {
+test("pawn can never move 3 squares", () => {
   const board = createBoard();
   const newBoard = movePawn(board, 81)(51);
   expect(newBoard[81]).toBe("P");
@@ -112,9 +113,24 @@ test("white pawn can never move 3 squares", () => {
 });
 
 
-test("other pieces cannot use movePawn", () => {
+test("non-pawns cannot use movePawn", () => {
   const board = createBoard();
   const newBoard = movePawn(board, 91)(81);
   expect(newBoard[91]).toBe("R");
   expect(newBoard[81]).toBe("P");
 });
+
+test("pawns cannot move through pieces", ()=>{
+  const board = fenToBoard("rnbqkbnr/pppppppp/8/8/8/q7/PPPPPPPP/RNBQKBNR")
+  console.log(board[81], board[71], board[61])
+  const newBoard = movePawn(board, 81)(61)
+  expect(newBoard[81]).toBe("P")
+  expect(newBoard[71]).toBe("q")
+})
+
+test.todo("rook can move horizontally", ()=>{
+  const board = fenToBoard("rnbqkbnr/pppppppp/8/8/3R4/8/PPPPPPPP/RNBQKBNR")
+
+  const newBoard = movePiece(board, 64)(68)
+  const nextBoard = movePiece(board, 68)(61)
+})

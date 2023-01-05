@@ -111,8 +111,8 @@ export const printBoard = (board: TPieces[]) => {
 };
 
 export const movePawn = (board: TPieces[], from: number) => (to: number) => {
+  if (board[from] !== "p" && board[from] !== "P") return [...board];
   const newBoard = [...board];
-  if (newBoard[from] !== "p" && newBoard[from] !== "P") return newBoard;
   const row = Math.floor(from / 10);
   const direction = newBoard[from] === "p" ? 1 : -1;
 
@@ -120,7 +120,8 @@ export const movePawn = (board: TPieces[], from: number) => (to: number) => {
     ? [from + direction * 10, from + direction * 20]
     : [from + direction * 10];
 
+
   if (!newToOptions.includes(to)) return newBoard;
 
-  return movePiece(board, from)(to);
+  return movePiece(newBoard, from)(to);
 };
