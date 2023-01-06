@@ -54,19 +54,19 @@ test("initial position", () => {
 });
 
 test("move position", () => {
-  const newBoard = movePieceAnywhere(createBoard(), 81)(71);
+  const newBoard = movePieceAnywhere(createBoard(), 81, 71);
   expect(newBoard[81]).toBe(0);
   expect(newBoard[71]).toBe("P");
 });
 
 test("piece cannot move out of bonds", () => {
-  const newBoard = movePieceAnywhere(createBoard(), 81)(80);
+  const newBoard = movePieceAnywhere(createBoard(), 81, 80);
   expect(newBoard[81]).toBe("P");
 });
 
 test("piece cannot move to occupied square of the same color", () => {
   const board = createBoard();
-  const newBoard = movePieceAnywhere(board, 91)(81);
+  const newBoard = movePieceAnywhere(board, 91,81);
 
   expect(newBoard[81]).toBe("P");
   expect(newBoard[91]).toBe("R");

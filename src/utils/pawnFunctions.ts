@@ -1,7 +1,7 @@
 import type { TPieces } from "@/utils/boardFunctions";
 import { isOccupied, movePieceAnywhere } from "@/utils/boardFunctions";
 
-export const movePawn = (board: TPieces[], from: number) => (to: number) => {
+export const movePawn = (board: TPieces[], from: number, to: number) => {
   if (board[from] !== "p" && board[from] !== "P") return [...board];
   const newBoard = [...board];
   const row = Math.floor(from / 10);
@@ -28,5 +28,5 @@ export const movePawn = (board: TPieces[], from: number) => (to: number) => {
     newBoard[from] = newBoard[from] === "p" ? "q" : "Q";
   }
 
-  return movePieceAnywhere(newBoard, from)(to);
+  return movePieceAnywhere(newBoard, from, to)
 };

@@ -1,5 +1,6 @@
 import { isOdd } from "@/utils/generalFunctions";
 import { movePawn } from "@/utils/pawnFunctions";
+import { moveRook } from "@/utils/rookFunctions";
 
 export type TPieces =
   | "p"
@@ -83,7 +84,11 @@ export const isSameColor = (fromPiece: TPieces, toPiece: TPieces) => {
   return toPiece === toPiece.toLowerCase();
 };
 
-export const movePieceAnywhere = (board: TPieces[], from: number) => (to: number) => {
+export const movePieceAnywhere = (
+  board: TPieces[],
+  from: number,
+  to: number
+) => {
   const newBoard = [...board];
   if (isOutOfBounds(to)) return newBoard;
   const fromPiece = newBoard[from] ?? 0;
@@ -98,22 +103,26 @@ export const movePieceAnywhere = (board: TPieces[], from: number) => (to: number
 
 export const boardToFen = (board: TPieces[]) => {
   const splitter = (lower: number, upper: number) => {
-    return board.slice(lower, upper).map((p) => p === 0 ? "1": p).join("");
-  }
+    return board
+      .slice(lower, upper)
+      .map((p) => (p === 0 ? "1" : p))
+      .join("");
+  };
 
   const arr: string[] = [];
   for (let i = 2; i < 10; i++) {
     arr.push(splitter(i * 10 + 1, i * 10 + 10 - 1));
   }
 
-  return arr.join("/"); 
-}
+  return arr.join("/");
+};
 
-export const moveUniquePiece = (piece?: TPieces) => {
-  if (piece === "p" || piece === "P") return movePawn;
-  return movePieceAnywhere;
-}
-
+export const movePiece = (board: TPieces[], from: number, to: number) => {
+  const piece = board[from];
+  if (piece === "p" || piece === "P") return movePawn(board, from, to)
+  if (piece === "r" || piece === "R") return moveRook(board, from, to)
+  return movePieceAnywhere(board, from, to);
+};
 
 export const isOccupied = (board: TPieces[], index: number) => {
   return board[index] !== 0;

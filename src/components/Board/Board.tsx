@@ -1,12 +1,16 @@
 import React from "react";
 import clsx from "clsx";
-import type { TPieces } from "@/utils/boardFunctions";
-import { boardToFen } from "@/utils/boardFunctions";
-import { moveUniquePiece } from "@/utils/boardFunctions";
-import { fenToBoard } from "@/utils/boardFunctions";
-import { movePieceAnywhere } from "@/utils/boardFunctions";
-import { createBoard, createLabel, isDarkSquare } from "@/utils/boardFunctions";
 import Piece from "@/components/Piece";
+import type {
+  TPieces} from "@/utils/boardFunctions";
+import {
+  boardToFen,
+  createBoard,
+  createLabel,
+  fenToBoard,
+  isDarkSquare,
+  movePiece
+} from "@/utils/boardFunctions";
 
 export default function Board() {
   const allSquares = Array(120).fill(null);
@@ -32,9 +36,7 @@ export default function Board() {
   const [moveFrom, setMoveFrom] = React.useState<number | null>(null);
 
   const handleMove = (to: number) => {
-    const mover = moveUniquePiece(board[moveFrom ?? 0] as TPieces);
-
-    setBoard(mover(board, moveFrom ?? 0)(to));
+    setBoard(movePiece(board, moveFrom ?? 0, to));
     setMoveFrom(null);
   };
 
@@ -56,7 +58,7 @@ export default function Board() {
                 square.dark
                   ? ["bg-sky-600"]
                   : ["bg-neutral-100", "text-sky-600"],
-                  square.index === moveFrom && ["bg-red-400", "text-neutral-100"]
+                square.index === moveFrom && ["bg-red-400", "text-neutral-100"],
               ])}
             >
               <Piece
