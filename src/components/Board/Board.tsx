@@ -2,6 +2,7 @@ import React from "react";
 import clsx from "clsx";
 import Piece from "@/components/Piece";
 import type { TPieces } from "@/utils/boardFunctions";
+import { movePieceAnywhere } from "@/utils/boardFunctions";
 import {
   boardToFen,
   createBoard,
@@ -10,6 +11,7 @@ import {
   isDarkSquare,
   movePiece,
 } from "@/utils/boardFunctions";
+import { Button } from "@/ui/Button";
 
 export default function Board() {
   const allSquares = Array(120).fill(null);
@@ -33,37 +35,34 @@ export default function Board() {
   const initialPosition = createBoard();
   const [board, setBoard] = React.useState(testPosition);
   const [moveFrom, setMoveFrom] = React.useState<number | null>(null);
-
-  console.log(boardToFen(board));
+  const [freeMove, setFreeMove] = React.useState(false);
 
   const handleMove = (to: number) => {
-    setBoard(movePiece(board, moveFrom ?? 0, to));
+    freeMove
+      ? setBoard(movePieceAnywhere(board, moveFrom ?? 0, to))
+      : setBoard(movePiece(board, moveFrom ?? 0, to));
     setMoveFrom(null);
   };
 
   return (
     <div data-testid="chessBoard" className={clsx([""])}>
-      <button
-        onClick={() => setBoard(initialPosition)}
-        type="button"
-        className={clsx([
-          "py-1",
-          "px-2",
-          "border",
-          "border-transparent",
-          "text-base",
-          "rounded-md",
-          "bg-sky-600",
-          "hover:bg-sky-700",
-          "focus:outline-none",
-          "focus:ring-2",
-          "focus:ring-offset-2",
-          "focus:ring-sky-500",
-          "text-sm",
-        ])}
-      >
-        Reset
-      </button>
+      <div className={clsx(["flex", "space-x-2"])}>
+        <Button
+          size={"sm"}
+          onClick={() => setFreeMove(!freeMove)}
+          type="button"
+        >
+          {freeMove ? "Free Move" : "Normal Move"}
+        </Button>
+
+        <Button
+          size={"sm"}
+          onClick={() => setBoard(initialPosition)}
+          type="button"
+        >
+          Reset
+        </Button>
+      </div>
       <div className={clsx(["py-2"])}>
         <label htmlFor="boardFen" className="sr-only">
           Fen
