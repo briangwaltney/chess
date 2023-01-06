@@ -1,15 +1,14 @@
 import React from "react";
 import clsx from "clsx";
 import Piece from "@/components/Piece";
-import type {
-  TPieces} from "@/utils/boardFunctions";
+import type { TPieces } from "@/utils/boardFunctions";
 import {
   boardToFen,
   createBoard,
   createLabel,
   fenToBoard,
   isDarkSquare,
-  movePiece
+  movePiece,
 } from "@/utils/boardFunctions";
 
 export default function Board() {
@@ -35,6 +34,8 @@ export default function Board() {
   const [board, setBoard] = React.useState(testPosition);
   const [moveFrom, setMoveFrom] = React.useState<number | null>(null);
 
+  console.log(boardToFen(board));
+
   const handleMove = (to: number) => {
     setBoard(movePiece(board, moveFrom ?? 0, to));
     setMoveFrom(null);
@@ -42,7 +43,50 @@ export default function Board() {
 
   return (
     <div data-testid="chessBoard" className={clsx([""])}>
-      <p>{boardToFen(board)}</p>
+      <button
+        onClick={() => setBoard(initialPosition)}
+        type="button"
+        className={clsx([
+          "py-1",
+          "px-2",
+          "border",
+          "border-transparent",
+          "text-base",
+          "rounded-md",
+          "bg-sky-600",
+          "hover:bg-sky-700",
+          "focus:outline-none",
+          "focus:ring-2",
+          "focus:ring-offset-2",
+          "focus:ring-sky-500",
+          "text-sm",
+        ])}
+      >
+        Reset
+      </button>
+      <div className={clsx(["py-2"])}>
+        <label htmlFor="boardFen" className="sr-only">
+          Fen
+        </label>
+        <input
+          name="boardFen"
+          id="boardFen"
+          onChange={(e) => setBoard(fenToBoard(e.target.value))}
+          className={clsx([
+            "block",
+            "w-full",
+            "border-neutral-300",
+            "shadow-sm",
+            "focus:border-sky-500",
+            "focus:ring-sky-500",
+            "sm:text-sm",
+            "rounded-md",
+            "bg-neutral-700",
+            "p-2",
+          ])}
+          value={boardToFen(board)}
+        />
+      </div>
       <div className={clsx(["grid", "grid-cols-8"])}>
         {playableSquares.map((square, index) => {
           return (

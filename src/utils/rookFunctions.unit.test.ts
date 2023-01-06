@@ -7,3 +7,7 @@ test("rook can move horizontally", () => {
 
   expect(newBoard[58]).toBe("R");
 });
+
+test("rook can move vertically", () => {
+
+})
