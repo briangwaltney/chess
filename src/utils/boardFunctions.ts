@@ -1,4 +1,5 @@
 import { isOdd } from "@/utils/generalFunctions";
+import { movePawn } from "@/utils/pawnFunctions";
 
 export type TPieces =
   | "p"
@@ -35,7 +36,7 @@ export const createLabel = (index: number) => {
   return `${rowLabel}${column}`;
 };
 
-export const convertFenToArr = (fen: string) => {
+export const fenToArr = (fen: string) => {
   return fen.split("/").map((row) => {
     return row
       .split("")
@@ -56,7 +57,7 @@ export const convertFenToArr = (fen: string) => {
 
 export const fenToBoard = (fen: string) => {
   const board = Array(120).fill(0);
-  const startingArr = convertFenToArr(fen);
+  const startingArr = fenToArr(fen);
   return board.map((_, index) => {
     if (index < 21 || index > 98) return 0;
     if (index % 10 === 0 || index % 10 === 9) return 0;
@@ -82,7 +83,7 @@ export const isSameColor = (fromPiece: TPieces, toPiece: TPieces) => {
   return toPiece === toPiece.toLowerCase();
 };
 
-export const movePiece = (board: TPieces[], from: number) => (to: number) => {
+export const movePieceAnywhere = (board: TPieces[], from: number) => (to: number) => {
   const newBoard = [...board];
   if (isOutOfBounds(to)) return newBoard;
   const fromPiece = newBoard[from] ?? 0;
@@ -95,45 +96,24 @@ export const movePiece = (board: TPieces[], from: number) => (to: number) => {
   return newBoard;
 };
 
-export const printBoard = (board: TPieces[]) => {
-  const printer = (lower: number, upper: number) => {
-    return console.log(
-      JSON.stringify(
-        board.slice(lower, upper).map((p) => p.toString()),
-        null
-      )
-    );
-  };
-
-  for (let i = 0; i < 12; i++) {
-    printer(i * 10, i * 10 + 10);
+export const boardToFen = (board: TPieces[]) => {
+  const splitter = (lower: number, upper: number) => {
+    return board.slice(lower, upper).map((p) => p === 0 ? "1": p).join("");
   }
-};
 
-export const movePawn = (board: TPieces[], from: number) => (to: number) => {
-  if (board[from] !== "p" && board[from] !== "P") return [...board];
-  const newBoard = [...board];
-  const row = Math.floor(from / 10);
-  const direction = newBoard[from] === "p" ? 1 : -1;
-  const squareOne = from + direction * 10;
-  const squareTwo = from + direction * 20;
-  const captureOne = from + direction * 9;
-  const captureTwo = from + direction * 11;
-  const captureSquares = [
-    isOccupied(newBoard, captureOne) ? captureOne : 0,
-    isOccupied(newBoard, captureTwo) ? captureTwo : 0,
-  ];
+  const arr: string[] = [];
+  for (let i = 2; i < 10; i++) {
+    arr.push(splitter(i * 10 + 1, i * 10 + 10 - 1));
+  }
 
-  const newToOptions = [3, 8].includes(row)
-    ? !isOccupied(newBoard, squareOne)
-      ? [squareOne, squareTwo]
-      : [squareOne]
-    : [squareOne];
+  return arr.join("/"); 
+}
 
-  if (![...newToOptions, ...captureSquares].includes(to)) return newBoard;
+export const moveUniquePiece = (piece?: TPieces) => {
+  if (piece === "p" || piece === "P") return movePawn;
+  return movePieceAnywhere;
+}
 
-  return movePiece(newBoard, from)(to);
-};
 
 export const isOccupied = (board: TPieces[], index: number) => {
   return board[index] !== 0;

@@ -1,8 +1,10 @@
 import React from "react";
 import clsx from "clsx";
 import type { TPieces } from "@/utils/boardFunctions";
+import { boardToFen } from "@/utils/boardFunctions";
+import { moveUniquePiece } from "@/utils/boardFunctions";
 import { fenToBoard } from "@/utils/boardFunctions";
-import { movePiece } from "@/utils/boardFunctions";
+import { movePieceAnywhere } from "@/utils/boardFunctions";
 import { createBoard, createLabel, isDarkSquare } from "@/utils/boardFunctions";
 import Piece from "@/components/Piece";
 
@@ -24,17 +26,21 @@ export default function Board() {
   const testPosition = fenToBoard(
     "r1bqkbnr/pPpppppp/2n5/8/8/8/P1PPPPPP/RNBQKBNR"
   );
+
   const initialPosition = createBoard();
   const [board, setBoard] = React.useState(testPosition);
   const [moveFrom, setMoveFrom] = React.useState<number | null>(null);
 
   const handleMove = (to: number) => {
-    setBoard(movePiece(board, moveFrom ?? 0)(to));
+    const mover = moveUniquePiece(board[moveFrom ?? 0] as TPieces);
+
+    setBoard(mover(board, moveFrom ?? 0)(to));
     setMoveFrom(null);
   };
 
   return (
     <div data-testid="chessBoard" className={clsx([""])}>
+      <p>{boardToFen(board)}</p>
       <div className={clsx(["grid", "grid-cols-8"])}>
         {playableSquares.map((square, index) => {
           return (
@@ -50,6 +56,7 @@ export default function Board() {
                 square.dark
                   ? ["bg-sky-600"]
                   : ["bg-neutral-100", "text-sky-600"],
+                  square.index === moveFrom && ["bg-red-400", "text-neutral-100"]
               ])}
             >
               <Piece
