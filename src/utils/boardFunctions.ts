@@ -30,11 +30,11 @@ export const isDarkSquare = (index: number) => {
 };
 
 export const createLabel = (index: number) => {
-  const column = index % 10;
-  const row = Math.floor(index / 10);
-  const rowLabel = String.fromCharCode(106 - row);
+  const row = 8 - (Math.floor(index / 10) - 2);
+  const column = String.fromCharCode(96 + (index % 10));
 
-  return `${rowLabel}${column}`;
+
+  return `${column}${row}`;
 };
 
 export const fenToArr = (fen: string) => {

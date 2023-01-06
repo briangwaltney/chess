@@ -18,14 +18,14 @@ test("isDarkSquare", () => {
 });
 
 test("create label", () => {
-  expect(createLabel(21)).toBe("h1");
+  expect(createLabel(21)).toBe("a8");
   expect(createLabel(28)).toBe("h8");
-  expect(createLabel(31)).toBe("g1");
-  expect(createLabel(32)).toBe("g2");
-  expect(createLabel(41)).toBe("f1");
-  expect(createLabel(42)).toBe("f2");
+  expect(createLabel(31)).toBe("a7");
+  expect(createLabel(32)).toBe("b7");
+  expect(createLabel(41)).toBe("a6");
+  expect(createLabel(42)).toBe("b6");
   expect(createLabel(91)).toBe("a1");
-  expect(createLabel(98)).toBe("a8");
+  expect(createLabel(98)).toBe("h1");
 });
 
 test("FEN to board", () => {

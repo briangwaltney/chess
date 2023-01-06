@@ -1,4 +1,5 @@
-import { createBoard, fenToBoard, movePiece } from "@/utils/boardFunctions";
+import { boardToFen, createBoard, fenToBoard, movePiece } from "@/utils/boardFunctions";
+import { pawnMovementOptions } from "@/utils/pawnFunctions";
 
 test("pawn can move 1 square", () => {
   const board = movePiece(createBoard(), 81, 71);
@@ -14,6 +15,23 @@ test("pawn can move 2 squares on first move", () => {
   expect(newBoard[61]).toBe("P");
   expect(newBoard[54]).toBe("p");
 });
+
+test("pawn move options from start are correct", ()=>{
+  const board = fenToBoard("8/6p1/1p6/6R1/8/3r4/2PPP3/8")
+  const cannotMove = pawnMovementOptions(board, 84);
+  const captureLeft = pawnMovementOptions(board, 85);
+  const captureRight = pawnMovementOptions(board, 83);
+  const oneForward = pawnMovementOptions(board, 42);
+  const secondBlocked = pawnMovementOptions(board, 37);
+
+  expect(cannotMove).toEqual([]);
+  expect(captureLeft).toEqual([65, 74, 75]);
+  expect(captureRight).toEqual([63, 73, 74]);
+  expect(oneForward).toEqual([52]);
+  expect(secondBlocked).toEqual([47]);
+
+
+})
 
 test("pawn cannot move 2 squares on second move", () => {
   const board = movePiece(createBoard(), 81, 61);
