@@ -38,7 +38,7 @@ export const movePawn = (board: TPieces[], from: number, to: number) => {
 
   if (!moveOptions.includes(to)) return newBoard;
 
-  if ([2, 9].includes(to)) {
+  if ([2, 9].includes(Math.floor(to / 10))) {
     newBoard[from] = newBoard[from] === "p" ? "q" : "Q";
   }
 

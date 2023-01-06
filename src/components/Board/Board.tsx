@@ -12,6 +12,7 @@ import {
   movePiece,
 } from "@/utils/boardFunctions";
 import { Button } from "@/ui/Button";
+import { pawnMovementOptions } from "@/utils/pawnFunctions";
 
 export default function Board() {
   const allSquares = Array(120).fill(null);
@@ -43,6 +44,8 @@ export default function Board() {
       : setBoard(movePiece(board, moveFrom ?? 0, to));
     setMoveFrom(null);
   };
+
+  const moveOptions = pawnMovementOptions(board, moveFrom ?? 0);
 
   return (
     <div data-testid="chessBoard" className={clsx([""])}>
@@ -102,11 +105,15 @@ export default function Board() {
                   ? ["bg-sky-600"]
                   : ["bg-neutral-100", "text-sky-600"],
                 square.index === moveFrom && ["bg-red-400", "text-neutral-100"],
+                moveOptions.includes(square.index) && [
+                  "bg-red-200",
+                  "text-sky-600",
+                ],
               ])}
             >
               <Piece
                 onClick={
-                  moveFrom
+                  moveOptions.includes(square.index)
                     ? () => handleMove(square.index)
                     : () => setMoveFrom(square.index)
                 }
