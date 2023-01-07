@@ -3,6 +3,9 @@
   "parserOptions": {
     "project": "./tsconfig.json"
   },
+  "env": {
+    "jest/globals": true
+  },
   "plugins": ["@typescript-eslint", "jest"],
   "extends": ["next/core-web-vitals", "plugin:@typescript-eslint/recommended"],
   "rules": {
