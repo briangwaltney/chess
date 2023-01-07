@@ -76,7 +76,8 @@ export const isOutOfBounds = (index: number) => {
   return false;
 };
 
-export const isSameColor = (fromPiece: TPieces, toPiece: TPieces) => {
+export const isSameColor = (fromPiece?: TPieces, toPiece?: TPieces) => {
+  if (fromPiece === undefined || toPiece === undefined) return false;
   if (fromPiece === 0 || toPiece === 0) return false;
   if (fromPiece === fromPiece.toUpperCase()) {
     return toPiece === toPiece.toUpperCase();

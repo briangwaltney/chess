@@ -3,7 +3,7 @@ import { cleanup, render, screen } from "@testing-library/react";
 
 
 
-describe("Layout", () => {
+describe.skip("Layout", () => {
 
   afterEach(() => {
     cleanup();

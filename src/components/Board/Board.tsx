@@ -45,7 +45,9 @@ export default function Board() {
     setMoveFrom(null);
   };
 
-  const moveOptions = pawnMovementOptions(board, moveFrom ?? 0);
+  const moveOptions = freeMove && moveFrom
+    ? playableSquares.map((s) => s.index)
+    : pawnMovementOptions(board, moveFrom ?? 0);
 
   return (
     <div data-testid="chessBoard" className={clsx([""])}>

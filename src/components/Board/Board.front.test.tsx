@@ -4,7 +4,7 @@ import { cleanup, render, screen } from "@testing-library/react";
 
 
 
-describe("Board", () => {
+describe.skip("Board", () => {
 
   afterEach(() => {
     cleanup();

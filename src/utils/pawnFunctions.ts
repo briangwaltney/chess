@@ -1,4 +1,5 @@
 import type { TPieces } from "@/utils/boardFunctions";
+import { isSameColor } from "@/utils/boardFunctions";
 import { isOccupied, movePieceAnywhere } from "@/utils/boardFunctions";
 
 export const pawnMovementOptions = (board: TPieces[], from: number) => {
@@ -14,13 +15,24 @@ export const pawnMovementOptions = (board: TPieces[], from: number) => {
   const captureRight = from + direction * 11;
   const captureRightOccupied = isOccupied(board, captureRight);
 
-  const forwardOne = !squareOneOccupied ? [squareOne] : [];
+  const forwardOne = !squareOneOccupied ? [squareOne] : []; 
   const forwardTwo =
     !squareOneOccupied && !squareTwoOccupied && [3, 8].includes(row)
       ? [squareTwo]
+      : []; 
+
+  const captureLeftSquare =
+    captureLeftOccupied &&
+    !isSameColor(board[from] ?? 0, board[captureLeft] ?? 0)
+      ? [captureLeft]
       : [];
-  const captureLeftSquare = captureLeftOccupied ? [captureLeft] : [];
-  const captureRightSquare = captureRightOccupied ? [captureRight] : [];
+
+  const captureRightSquare =
+    captureRightOccupied &&
+    !isSameColor(board[from] ?? 0, board[captureRight] ?? 0)
+      ? [captureRight]
+      : []; 
+
 
   return [
     ...forwardOne,
