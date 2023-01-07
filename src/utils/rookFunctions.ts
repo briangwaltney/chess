@@ -1,12 +1,11 @@
 import type { TPieces } from "@/utils/boardFunctions";
 import { isSameColor } from "@/utils/boardFunctions";
 import { movePieceAnywhere } from "@/utils/boardFunctions";
-import { ZodNumberDef } from "zod";
 
 export const rookMovementOptions = (board: TPieces[], from: number) => {
   if (board[from] !== "R" && board[from] !== "r") return [];
 
-  return [...rightOptions(board, from), ...leftOptions(board, from)];
+  return [...horizontalOptions(board, from)];
 };
 
 export const moveRook = (board: TPieces[], from: number, to: number) => {
@@ -29,8 +28,9 @@ export const moveRook = (board: TPieces[], from: number, to: number) => {
   return board;
 };
 
-const rightOptions = (board: TPieces[], from: number) => {
+const horizontalOptions = (board: TPieces[], from: number) => {
   const row = Math.floor(from / 10);
+
   const result = [];
   for (let i = (from % 10) - 1; i > 0; i--) {
     if (board[10 * row + i] !== 0) {
@@ -39,12 +39,6 @@ const rightOptions = (board: TPieces[], from: number) => {
     }
     result.push(10 * row + i);
   }
-  return result;
-};
-
-export const leftOptions = (board: TPieces[], from: number) => {
-  const row = Math.floor(from / 10); 
-  const result = [];
   for (let i = (from % 10) + 1; i < 9; i++) {
     if (board[10 * row + i] !== 0) {
       result.push(...addHorizontal(board, from, i));
